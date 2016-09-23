@@ -1,0 +1,5 @@
+Pour le 7 octobre 2016 : 
+
+- installer un sdk
+- faire tourner le moteur
+- lejos
