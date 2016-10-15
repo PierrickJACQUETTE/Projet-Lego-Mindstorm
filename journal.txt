@@ -1,5 +1,14 @@
-Pour le 7 octobre 2016 : 
+Pour le 21 octobre 2016 : 
+- monter le véhicule -> fait
+- faire rouler le véhicule
+	moteur prise B : roue droite
+	moteur prise D : roue gauche
+	capteur de couleur prise 1
 
-- installer un sdk
-- faire tourner le moteur
-- lejos
+Pour le 14 octobre 2016 :
+- récupérer les piéces -> fait
+
+Pour le 7 octobre 2016 : 
+- installer un sdk -> fait 
+- faire tourner le moteur -> fait
+- lejos -> fait
