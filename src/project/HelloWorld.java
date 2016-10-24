@@ -1,3 +1,5 @@
+package project;
+
 import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
 
