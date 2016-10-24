@@ -1,3 +1,7 @@
+Pour le 11 novembre 2016 :
+- phase d'apprentissage pour connaitre les valeurs detectées par le capteur
+- phase de reconnaissance des couleurs 
+
 Pour le 21 octobre 2016 : 
 - monter le véhicule -> fait
 - faire rouler le véhicule
