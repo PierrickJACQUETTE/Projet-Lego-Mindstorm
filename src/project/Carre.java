@@ -4,9 +4,9 @@ import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.robotics.RegulatedMotor;
 
-public class Test {
+public class Carre {
 	
-	private static int roueDiam = 6;
+	private static int roueDiam = 5;
 	private static int roboDiam = 15;
 	
 	
@@ -22,7 +22,7 @@ public class Test {
 	}	
 	
 	/* roboDiam * PI represente la distance que parcours le robot en faisant un tour complet sur lui meme.
-	 * Ici on veux juste 90° donc on divise par 4 [360/4].
+	 * Ici on veux juste 90ï¿½ donc on divise par 4 [360/4].
 	 * On fait ensuite la conversion en degree.
 	 * */
 	public static void tourneD(RegulatedMotor x, RegulatedMotor y){
