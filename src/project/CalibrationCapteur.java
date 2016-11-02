@@ -1,29 +1,66 @@
 package project;
 
-import lejos.hardware.ev3.LocalEV3;
-import lejos.hardware.lcd.LCD;
-import lejos.hardware.port.Port;
-import lejos.hardware.sensor.HiTechnicColorSensor;
-import lejos.robotics.SampleProvider;
-import lejos.utility.Delay;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class CalibrationCapteur {
 
-	public static float convertToRGB(float f) {
-		return (float) ((f == 1) ? 255 : f * 256.0);
+	/*
+	 * Mettre le jar dans samples sur ev3 : 
+	 * scp CalibrationCapteur.jar root@10.0.1.1:lejos/samples
+	 * 
+	 * Pour récupérer le fichier de sortie :
+	 * scp root@10.0.1.1:lejos/samples/Couleur.txt ~
+	 * 
+	 * le mot de passe en vide (presser entree)
+	 */
+
+	private final short SAMPLE = 10;
+	private PrintWriter p;
+	private Color couleur;
+
+	public CalibrationCapteur(String name) {
+		this.p = initFile();
+		this.couleur = new Color(0f, 0f, 0f, name);
 	}
 
-	public static void main(String[] args) {
-		Port p = LocalEV3.get().getPort("S1");
-		HiTechnicColorSensor ecs = new HiTechnicColorSensor(p);
-		SampleProvider colorRGBSensor = ecs.getRGBMode();
-		int sampleSize = colorRGBSensor.sampleSize();
-		float[] sample = new float[sampleSize];
-		for (int i = 0; i < sample.length; i++) {
-			colorRGBSensor.fetchSample(sample, 0);
-			LCD.drawString(i + " " + convertToRGB(sample[i]), 0, 4);
-			Delay.msDelay(3000);
+	public void start() {
+		this.medium();
+		this.p.println(this.couleur.toString());
+		this.p.flush();
+		this.p.close();
+	}
 
+	private void medium() {
+		for (int i = SAMPLE; i > 0; i--) {
+			Color c = Util.readColor();
+			this.couleur.setRed(this.couleur.getRed() + c.getRed());
+			this.couleur.setGreen(this.couleur.getGreen() + c.getGreen());
+			this.couleur.setBlue(this.couleur.getBlue() + c.getBlue());
 		}
+		this.couleur.setRed(this.couleur.getRed() / SAMPLE);
+		this.couleur.setGreen(this.couleur.getGreen() / SAMPLE);
+		this.couleur.setBlue(this.couleur.getBlue() / SAMPLE);
+	}
+
+	private PrintWriter initFile() {
+		PrintWriter p = null;
+		try {
+			p = new PrintWriter(new FileWriter(Util.NAMEFILE, true));
+		} catch (NullPointerException a) {
+			a.getStackTrace();
+			System.out.println("Error : pointeur null");
+		} catch (IOException a) {
+			a.getStackTrace();
+			System.out.println("Probleme d'IO");
+		}
+		return p;
+	}
+	
+	public static void main(String[] args) {
+		CalibrationCapteur test = new CalibrationCapteur("bleu");
+		test.start();
+
 	}
 }
