@@ -12,11 +12,9 @@ import lejos.utility.Delay;
 public class FindColor {
 
 	ArrayList<Color> colorLearned;
-	ArrayList<Float> epsilon;
 
 	public FindColor() {
 		this.colorLearned = readFile();
-		this.epsilon = new ArrayList<Float>();
 	}
 
 	private ArrayList<Color> readFile() {
@@ -45,24 +43,17 @@ public class FindColor {
 	}
 
 	public void whatColor(Color c) {
-		for (Color learn  : this.colorLearned) {
-			this.epsilon.add(euclide(c, learn));
-		}
-		float min = 99999f;
-		int index = this.colorLearned.size();
-		for (int i = 0; i < this.epsilon.size(); i++) {
-			if (this.epsilon.get(i) <= min) {
-				min = this.epsilon.get(i);
-				index = i;
+		float min = euclide(c, this.colorLearned.get(0));
+		Color colorMin = this.colorLearned.get(0);
+		float tmpMin;
+		for (int i = 1; i < this.colorLearned.size(); i++) {
+			if ((tmpMin = euclide(c, this.colorLearned.get(i))) <= min) {
+				min = tmpMin;
+				colorMin = this.colorLearned.get(i);
 			}
 		}
-		if (index == this.colorLearned.size()) {
-			LCD.drawString(" Color not found", 0, 4);
-			Delay.msDelay(Util.DELAY);
-		} else {
-			LCD.drawString("color : " + this.colorLearned.get(index).getName(), 0, 4);
-			Delay.msDelay(Util.DELAY);
-		}
+		LCD.drawString("color : " + colorMin.getName(), 0, 4);
+		Delay.msDelay(Util.DELAY);
 	}
 
 	private float euclide(Color c, Color ref) {
