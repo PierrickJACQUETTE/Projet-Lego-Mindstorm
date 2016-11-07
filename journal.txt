@@ -1,3 +1,7 @@
+Lun  7 nov 2016 15:28:13 CET
+- reconnaissance mais avec un seul apprentissage.
+- à faire: pahse d'apprentissage ou l'on décide du nombre de couleurs à apprendre, phase de reconnaissance ou l'on tient compte de toutes les couleurs mesurées et des échantillons pour chaque couleur.
+
 Pour le 11 novembre 2016 :
 - phase d'apprentissage pour connaitre les valeurs detectées par le capteur
 - phase de reconnaissance des couleurs 
