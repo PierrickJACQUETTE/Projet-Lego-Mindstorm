@@ -5,15 +5,15 @@ public class Color {
 	private float red;
 	private float green;
 	private float blue;
-	private final String name;
+	private int name;
 
-	public Color(float red, float green, float blue, String name) {
+	public Color(float red, float green, float blue, int name) {
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
 		this.name = name;
 	}
-	
+
 	protected float getRed() {
 		return red;
 	}
@@ -26,7 +26,7 @@ public class Color {
 		return blue;
 	}
 
-	protected String getName() {
+	protected int getName() {
 		return name;
 	}
 
@@ -42,7 +42,18 @@ public class Color {
 		this.blue = blue;
 	}
 
+	protected void setName(int name) {
+		this.name = name;
+	}
+
 	public String toString() {
 		return this.red + " " + this.green + " " + this.blue + " " + this.name + "\r";
+	}
+
+	protected float euclide(Color c) {
+		float dRed = c.getRed() - this.getRed();
+		float dGreen = c.getGreen() - this.getGreen();
+		float dBlue = c.getBlue() - this.getBlue();
+		return (float) Math.sqrt((dRed * dRed) + (dGreen * dGreen) + (dBlue * dBlue));
 	}
 }
