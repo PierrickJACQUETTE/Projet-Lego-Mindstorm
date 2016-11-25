@@ -1,22 +1,28 @@
-Pour le 18 novembre 2016 :
+* <2016-11-25>
+** Fait:
+   - etalonnage "distance euclidienne"
+** A faire:
+   - algorithme de suivi de ligne
+
+* Pour le 18 novembre 2016 :
 - phase d'apprentissage nombre variable de couleurs à choisir par l'utilisateur
 - phase de reconnaissance des couleurs en fonction de celle apprises
 
-Lun  7 nov 2016 15:28:13 CET
+* Lun  7 nov 2016 15:28:13 CET
 - reconnaissance mais avec un seul apprentissage.
 - à faire: pahse d'apprentissage ou l'on décide du nombre de couleurs à apprendre, phase de reconnaissance ou l'on tient compte de toutes les couleurs mesurées et des échantillons pour chaque couleur.
 
-Pour le 21 octobre 2016 : 
+* Pour le 21 octobre 2016 : 
 - monter le véhicule -> fait
 - faire rouler le véhicule
 	moteur prise B : roue droite
 	moteur prise D : roue gauche
 	capteur de couleur prise 1
 
-Pour le 14 octobre 2016 :
+* Pour le 14 octobre 2016 :
 - récupérer les piéces -> fait
 
-Pour le 7 octobre 2016 : 
+* Pour le 7 octobre 2016 : 
 - installer un sdk -> fait 
 - faire tourner le moteur -> fait
 - lejos -> fait
