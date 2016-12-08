@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import lejos.hardware.lcd.LCD;
+import lejos.robotics.RegulatedMotor;
 import lejos.utility.Delay;
 
 public class FindColor {
@@ -55,7 +56,7 @@ public class FindColor {
 		return list;
 	}
 
-	protected void whatColor(Color c) {
+	protected int whatColor(Color c) {
 		for (int i = 0; i < this.distanceColor.size(); i++) {
 			this.distanceColor.get(i).setDistance(this.distanceColor.get(i).getColor().euclide(c));
 		}
@@ -64,10 +65,12 @@ public class FindColor {
 
 		if (index == this.distanceColor.size()) {
 			LCD.drawString(" Color not found", 0, 4);
-			Delay.msDelay(Util.DELAY);
+			//Delay.msDelay(Util.DELAY);
+			return -1;
 		} else {
 			LCD.drawString("color : " + index, 0, 4);
-			Delay.msDelay(Util.DELAY);
+			//Delay.msDelay(Util.DELAY);
+			return index;
 		}
 	}
 

@@ -22,11 +22,11 @@ public class Carre {
 	}	
 	
 	/* roboDiam * PI represente la distance que parcours le robot en faisant un tour complet sur lui meme.
-	 * Ici on veux juste 90� donc on divise par 4 [360/4].
+	 * Ici on veux juste 90% donc on divise par 4 [360/4].
 	 * On fait ensuite la conversion en degree.
 	 * */
-	public static void tourneD(RegulatedMotor x, RegulatedMotor y){
-		int deg = (int) Math.round((((roboDiam*Math.PI)/4.0)/roueDiam)*360.0)/3;
+	public static void tourneD(RegulatedMotor x, RegulatedMotor y, int ang){
+		int deg = (int) Math.round((((roboDiam*Math.PI)/ang)/roueDiam)*360.0)/3;
 		x.rotate(-deg,true);
 		y.rotate(deg);
 	}
@@ -39,7 +39,7 @@ public class Carre {
 		
 		for(int i = 0; i < 4; i++){
 			avance(right, left, 30); //AVANCE SUR UNE DISTANCE DE 30CM
-			tourneD(right, left); //TOURNE A 90 DEGRES SUR LA DROITE
+			tourneD(right, left, 4); //TOURNE A 90 DEGRES SUR LA DROITE
 		}		
 	}
 }
