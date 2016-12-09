@@ -26,9 +26,10 @@ public class CalibrationCapteur {
 		// vaut 1 si Button Up et vaut 2 si Button Right
 		int lastAction = 0;
 		boolean ok = false, lastOk = false;
-		Util.DelayClearLCD();
+		//Util.DelayClearLCD();
 		boolean loop = true;
 		while (loop) {
+			/*
 			LCD.drawString("Appuyer sur ESCAPE", 0, 1);
 			LCD.drawString("pour stopper", 1, 2);
 			LCD.drawString("Appuyer sur HAUT", 0, 3);
@@ -36,6 +37,7 @@ public class CalibrationCapteur {
 			LCD.drawString("Appuyer sur DROITE", 0, 5);
 			LCD.drawString("pour new color", 1, 6);
 			Util.DelayClearLCD();
+			*/
 			switch (Button.waitForAnyEvent()) {
 			case Button.ID_UP:
 				this.write(name, releve);

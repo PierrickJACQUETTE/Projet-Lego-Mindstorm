@@ -56,7 +56,8 @@ public class FindColor {
 		return list;
 	}
 
-	protected int whatColor(Color c) {
+	// affichage 1 quand find, 0 sinon quand on avance
+	protected int whatColor(Color c, boolean affichage) {
 		for (int i = 0; i < this.distanceColor.size(); i++) {
 			this.distanceColor.get(i).setDistance(this.distanceColor.get(i).getColor().euclide(c));
 		}
@@ -64,12 +65,16 @@ public class FindColor {
 		int index = this.maxOccurence(this.ensemble);
 
 		if (index == this.distanceColor.size()) {
-			LCD.drawString(" Color not found", 0, 4);
-			//Delay.msDelay(Util.DELAY);
+			if (affichage == true) {
+				LCD.drawString(" Color not found", 0, 4);
+				Delay.msDelay(Util.DELAY);
+			}
 			return -1;
 		} else {
-			LCD.drawString("color : " + index, 0, 4);
-			//Delay.msDelay(Util.DELAY);
+			if (affichage == true) {
+				LCD.drawString("color : " + index, 0, 4);
+				Delay.msDelay(Util.DELAY);
+			}
 			return index;
 		}
 	}
@@ -142,7 +147,7 @@ public class FindColor {
 
 	public static void main(String[] args) {
 		FindColor find = new FindColor();
-		find.whatColor(Util.readColor());
+		find.whatColor(Util.readColor(), true);
 	}
 
 }
