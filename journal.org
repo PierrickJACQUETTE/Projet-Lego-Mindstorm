@@ -1,3 +1,12 @@
+* <2016-12-09>
+** Fait:
+  - Un algorithme de suivi de ligne
+  - Jalon 2 : OK
+  - Jalon 3 : OK
+
+** A faire:
+   - Que l'étalonnage soit plus rapide!
+   - Ajuster dynamiquement les angles et la vitesse!
 * <2016-11-25>
 ** Fait:
    - etalonnage "distance euclidienne"
