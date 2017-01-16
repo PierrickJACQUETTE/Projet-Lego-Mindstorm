@@ -147,7 +147,7 @@ public class FindColor {
 
 	public static void main(String[] args) {
 		FindColor find = new FindColor();
-		find.whatColor(Util.readColor(), true);
+		find.whatColor(Util.lireColor(), true);
 	}
 
 }

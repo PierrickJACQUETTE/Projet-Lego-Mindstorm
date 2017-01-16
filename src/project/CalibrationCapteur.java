@@ -26,23 +26,27 @@ public class CalibrationCapteur {
 		// vaut 1 si Button Up et vaut 2 si Button Right
 		int lastAction = 0;
 		boolean ok = false, lastOk = false;
-		//Util.DelayClearLCD();
 		boolean loop = true;
 		while (loop) {
 			/*
-			LCD.drawString("Appuyer sur ESCAPE", 0, 1);
-			LCD.drawString("pour stopper", 1, 2);
-			LCD.drawString("Appuyer sur HAUT", 0, 3);
-			LCD.drawString("pour ajout", 1, 4);
-			LCD.drawString("Appuyer sur DROITE", 0, 5);
-			LCD.drawString("pour new color", 1, 6);
-			Util.DelayClearLCD();
-			*/
+			 * LCD.drawString("Appuyer sur ESCAPE", 0, 1); LCD.drawString(
+			 * "pour stopper", 1, 2); LCD.drawString("Appuyer sur HAUT", 0, 3);
+			 * LCD.drawString("pour ajout", 1, 4); LCD.drawString(
+			 * "Appuyer sur DROITE", 0, 5); LCD.drawString("pour new color", 1,
+			 * 6);
+			 */
 			switch (Button.waitForAnyEvent()) {
 			case Button.ID_UP:
-				this.write(name, releve);
-				lastReleve = releve;
-				releve++;
+				for (int i = 0; i < 10; i++) {
+					this.write(name, releve);
+					lastReleve = releve;
+					releve++;
+					try {
+						Thread.sleep(50);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 				lastOk = ok;
 				ok = true;
 				lastAction = 1;
@@ -52,8 +56,16 @@ public class CalibrationCapteur {
 					name++;
 					lastReleve = releve;
 					releve = 0;
-					this.write(name, releve);
+					for (int i = 0; i < 10; i++) {
+						this.write(name, releve);
+						try {
+							Thread.sleep(50);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 					releve++;
+
 					lastAction = 2;
 				} else {
 					LCD.drawString("Aucun releve ", 0, 3);
@@ -94,7 +106,7 @@ public class CalibrationCapteur {
 	}
 
 	private void write(int name, int releve) {
-		this.couleur = Util.readColor();
+		this.couleur = Util.lireColor();
 		this.couleur.setName(name);
 		this.p.println(this.dernier);
 		this.dernier = this.couleur.toString();

@@ -28,24 +28,24 @@ public class Follow {
 		RegulatedMotor left = new EV3LargeRegulatedMotor(MotorPort.D);
 
 		FindColor find = new FindColor();
-		int followedColor = find.whatColor(Util.readColor(), false);
+		int followedColor = find.whatColor(Util.lireColor(), false);
 		int seenColor;
 
 		do {
 			begSync(right, left);
 			avance(right, left);
 			endSync(right, left);
-			seenColor = find.whatColor(Util.readColor(), false);
+			seenColor = find.whatColor(Util.lireColor(), false);
 			int c = 0;
 			while (seenColor != followedColor && c < 10) {
 				switch (c % 2) {
 				case 0:
 					Util.tourne(right, left, 5 * (++c));
-					seenColor = find.whatColor(Util.readColor(), false);
+					seenColor = find.whatColor(Util.lireColor(), false);
 					break;
 				case 1:
 					Util.tourne(left, right, 5 * (++c));
-					seenColor = find.whatColor(Util.readColor(), false);
+					seenColor = find.whatColor(Util.lireColor(), false);
 					break;
 				}
 			}

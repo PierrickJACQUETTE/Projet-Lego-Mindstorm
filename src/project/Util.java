@@ -16,7 +16,7 @@ public class Util {
 	private static int roueDiam = 5;
 	private static int roboDiam = 15;
 
-	protected static Color readColor() {
+	protected static Color lireColor() {
 		Port p = LocalEV3.get().getPort("S1");
 		HiTechnicColorSensor ecs = new HiTechnicColorSensor(p);
 		SampleProvider colorRGBSensor = ecs.getRGBMode();
@@ -47,7 +47,7 @@ public class Util {
 		y.rotate(deg);
 	}	
 	
-	/* Tourne à droite
+	/* Tourne ï¿½ droite
 	 * roboDiam * PI represente la distance que parcours le robot en faisant un tour complet sur lui meme.
 	 * Ici on veux juste 90% donc on divise par 4 [360/4].
 	 * On fait ensuite la conversion en degree.

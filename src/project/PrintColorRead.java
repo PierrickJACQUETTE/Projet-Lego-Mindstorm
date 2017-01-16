@@ -16,7 +16,7 @@ public class PrintColorRead {
 			Util.DelayClearLCD();
 			switch (Button.waitForAnyEvent()) {
 			case Button.ID_UP:
-				Color c = Util.readColor();
+				Color c = Util.lireColor();
 				LCD.drawString("ROUGE : " + c.getRed(), 0, 1);
 				LCD.drawString("VERT : " + c.getGreen(), 0, 2);
 				LCD.drawString("BLUE : " + c.getBlue(), 0, 3);
