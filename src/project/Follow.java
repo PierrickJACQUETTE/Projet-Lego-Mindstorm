@@ -1,54 +1,60 @@
 package project;
 
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.port.MotorPort;
-import lejos.robotics.RegulatedMotor;
-import lejos.utility.Delay;
-
 public class Follow {
+	
+	protected static void start(){
 
-	public static void begSync(RegulatedMotor a, RegulatedMotor b) {
-		b.synchronizeWith(new RegulatedMotor[] { a });
-		a.startSynchronization();
-	}
-
-	public static void avance(RegulatedMotor a, RegulatedMotor b) {
-		a.forward();
-		b.forward();
-	}
-
-	public static void endSync(RegulatedMotor a, RegulatedMotor b) {
-		a.endSynchronization();
-		Delay.msDelay(300);
-	}
-
-	public static void main(String[] args) {
-
-		RegulatedMotor right = new EV3LargeRegulatedMotor(MotorPort.B);
-		RegulatedMotor left = new EV3LargeRegulatedMotor(MotorPort.D);
-
+		Robot ev3 = new Robot();
+		
 		FindColor find = new FindColor();
-		int followedColor = find.whatColor(Util.lireColor(), false);
+		//int followedColor = find.whatColor(Util.lireColor(), false);
 		int seenColor;
 
 		do {
-			begSync(right, left);
-			avance(right, left);
-			endSync(right, left);
+			ev3.begSync();
+			ev3.avance();
+			ev3.ligne++;
+			ev3.accelerer();
+			ev3.endSync();
+			
 			seenColor = find.whatColor(Util.lireColor(), false);
 			int c = 0;
-			while (seenColor != followedColor && c < 10) {
-				switch (c % 2) {
-				case 0:
-					Util.tourne(right, left, 5 * (++c));
+			
+			if(ev3.direction == 1){
+				while (seenColor != ev3.suivre && c < 10) {		
+					ev3.ralentir();
+					switch (c % 2) {
+					case 0:
+						ev3.pivotD(7 * (++c));
+						ev3.direction = 0;
+						break;
+					case 1:
+						ev3.pivotG(7 * (++c));	
+						ev3.direction = 2;
+						break;
+					}
 					seenColor = find.whatColor(Util.lireColor(), false);
-					break;
-				case 1:
-					Util.tourne(left, right, 5 * (++c));
-					seenColor = find.whatColor(Util.lireColor(), false);
-					break;
 				}
-			}
-		} while (seenColor == followedColor);
+			} else {
+				while(seenColor != ev3.suivre){
+					ev3.ralentir();
+					switch(ev3.direction){
+					case 0:
+						ev3.tourneD();
+						break;
+					case 2:
+						ev3.tourneG();
+						break;
+					}
+					ev3.courbe++;
+					seenColor = find.whatColor(Util.lireColor(), false);
+					if(ev3.courbe == 10){ ev3.direction = 1;}
+				}
+			}	
+		} while (seenColor == ev3.suivre);
+	}
+	
+	public static void main(String[] args) {
+		start();
 	}
 }
