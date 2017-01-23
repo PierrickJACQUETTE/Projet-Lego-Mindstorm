@@ -12,10 +12,10 @@ public class Robot {
 	private static int roueDiam = 5;
 	private static int roboDiam = 15;
 	
-	static int direction = 1;
-	static int ligne = 1;
-	static int courbe = 1;
-	static int suivre = 1;
+	 int direction = 1;
+	 int ligne = 1;
+	 int courbe = 1;
+	 int suivre = 1;
 	
 	public Robot(){
 		right = new EV3LargeRegulatedMotor(MotorPort.B);
@@ -61,14 +61,20 @@ public class Robot {
 		right.rotate(deg);
 	}
 	
-	public void tourneD(){		
-		right.forward();
-		Delay.msDelay(100);
+	public void tourneD(){	
+		right.setSpeed(right.getSpeed() /2);
+		this.begSync();
+		this.avance();
+		this.endSync();
+		right.setSpeed(right.getSpeed()*2);
 	}
 	
 	public void tourneG(){
-		left.forward();
-		Delay.msDelay(100);
+		left.setSpeed(left.getSpeed() /2);
+		this.begSync();
+		this.avance();
+		this.endSync();
+		left.setSpeed(left.getSpeed()*2);
 	}
 	
 	public void accelerer(){
