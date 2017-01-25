@@ -1,3 +1,11 @@
+* <2017-01-125>
+*** Fait:
+    - Étallonage très vite
+*** A Faire:
+    - Color recognition qui marche hors de tapis (maintenant l'algo dit toujours "noir")
+    - Zigaguer et changer dynamiquement la vitesse des moteurs
+
+
 * <2016-12-09>
 ** Fait:
   - Un algorithme de suivi de ligne
