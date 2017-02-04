@@ -7,35 +7,36 @@ import java.io.PrintWriter;
 
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
+import lejos.utility.Delay;
 
 public class CalibrationCapteur {
 
 	private PrintWriter p;
-	private Color couleur;
+	private Couleur couleur;
+	private short name;
+	Robot robot;
 
 	public CalibrationCapteur() {
+		this.robot = new Robot();
 		this.p = initFile();
-		this.couleur = new Color(0f, 0f, 0f, 0);
+		this.name = 0;
 	}
 
+	/*
+	 * LCD.drawString("Appuyer sur ESCAPE", 0, 1); LCD.drawString(
+	 * "pour stopper", 1, 2); LCD.drawString("Appuyer sur HAUT", 0, 3);
+	 * LCD.drawString("pour ajout", 1, 4); LCD.drawString( "Appuyer sur DROITE",
+	 * 0, 5); LCD.drawString("pour new color", 1, 6);
+	 */
 	protected void start() {
-		int name = 0;
-		int releve = 0;
 		boolean ok = false;
 		boolean loop = true;
 		while (loop) {
-			/*
-			 * LCD.drawString("Appuyer sur ESCAPE", 0, 1); LCD.drawString(
-			 * "pour stopper", 1, 2); LCD.drawString("Appuyer sur HAUT", 0, 3);
-			 * LCD.drawString("pour ajout", 1, 4); LCD.drawString(
-			 * "Appuyer sur DROITE", 0, 5); LCD.drawString("pour new color", 1,
-			 * 6);
-			 */
 			switch (Button.waitForAnyEvent()) {
 			case Button.ID_UP:
+				LCD.drawString("Start pour " + name, 0, 3);
 				for (int i = 0; i < 10; i++) {
-					this.write(name, releve);
-					releve++;
+					this.write(i);
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
@@ -44,15 +45,15 @@ public class CalibrationCapteur {
 				}
 				ok = true;
 				LCD.drawString("Finie pour " + name, 0, 3);
-				Util.DelayClearLCD();
+				this.delayClearLCD();
 				break;
 			case Button.ID_RIGHT:
 				if (ok) {
-					name++;
+					this.name++;
 				} else {
 					LCD.drawString("Aucun releve ", 0, 3);
 					LCD.drawString("pour couleur " + name, 1, 4);
-					Util.DelayClearLCD();
+					this.delayClearLCD();
 				}
 				break;
 			case Button.ID_ESCAPE:
@@ -61,26 +62,25 @@ public class CalibrationCapteur {
 			default:
 				break;
 			}
-
 		}
 		this.p.flush();
 		this.p.close();
 	}
 
-	private void write(int name, int releve) {
-		this.couleur = Util.lireColor();
-		this.couleur.setName(name);
+	private void write(int releve) {
+		this.couleur = this.robot.lireColor();
+		this.couleur.setName(this.name);
 		this.p.println(this.couleur);
 	}
 
 	private PrintWriter initFile() {
 		PrintWriter p = null;
 		try {
-			File file = new File(Util.NAMEFILE);
+			File file = new File(this.robot.NAMEFILE);
 			if (file.exists()) {
 				file.delete();
 			}
-			p = new PrintWriter(new FileWriter(Util.NAMEFILE));
+			p = new PrintWriter(new FileWriter(this.robot.NAMEFILE));
 		} catch (NullPointerException a) {
 			a.getStackTrace();
 			System.out.println("Error : pointeur null");
@@ -89,6 +89,11 @@ public class CalibrationCapteur {
 			System.out.println("Probleme d'IO");
 		}
 		return p;
+	}
+
+	private void delayClearLCD() {
+		Delay.msDelay(500);
+		LCD.clearDisplay();
 	}
 
 	public static void main(String[] args) {

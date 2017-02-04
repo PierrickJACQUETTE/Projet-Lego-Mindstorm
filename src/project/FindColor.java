@@ -7,22 +7,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import lejos.hardware.lcd.LCD;
-import lejos.robotics.RegulatedMotor;
 import lejos.utility.Delay;
 
 public class FindColor {
 
+	private final short DELAY = 500;
 	private ArrayList<DistanceColor> distanceColor;
 	private int ensemble;
 
-	public FindColor() {
-		this.distanceColor = this.readFile();
+	public FindColor(String name) {
+
+		this.distanceColor = this.readFile(name);
 		this.ensemble = this.distanceColor.size() / nbColour();
 	}
 
 	private int nbColour() {
 		int cpt = 0;
-		ArrayList<Integer> idColor = new ArrayList<Integer>();
+		ArrayList<Short> idColor = new ArrayList<Short>();
 		for (DistanceColor d : this.distanceColor) {
 			if (!idColor.contains(d.getColor().getName())) {
 				cpt++;
@@ -32,32 +33,36 @@ public class FindColor {
 		return cpt;
 	}
 
-	private ArrayList<DistanceColor> readFile() {
+	private ArrayList<DistanceColor> readFile(String name) {
 		ArrayList<DistanceColor> list = new ArrayList<DistanceColor>();
 		try {
-			BufferedReader fluxEntree = new BufferedReader(new FileReader(Util.NAMEFILE));
+			BufferedReader fluxEntree = new BufferedReader(new FileReader(name));
 			String ligne;
 			while ((ligne = fluxEntree.readLine()) != null) {
 				String[] read = ligne.split(" ");
 				if (read.length == 4) {
-					list.add(new DistanceColor(new Color(Float.parseFloat(read[0]), Float.parseFloat(read[1]),
-							Float.parseFloat(read[2]), Integer.parseInt(read[3])), 9999f));
+					list.add(new DistanceColor(new Couleur(Float.parseFloat(read[0]), Float.parseFloat(read[1]),
+							Float.parseFloat(read[2]), Short.parseShort(read[3])), 9999f));
 				}
 			}
 			fluxEntree.close();
 		} catch (FileNotFoundException e) {
 			System.out.println(" File not found");
 			LCD.drawString(" File not found", 0, 4);
-			Delay.msDelay(Util.DELAY);
+			Delay.msDelay(this.DELAY);
 		} catch (IOException e) {
 			LCD.drawString(" Error open", 0, 4);
-			Delay.msDelay(Util.DELAY);
+			Delay.msDelay(this.DELAY);
 		}
 		return list;
 	}
 
 	// affichage 1 quand find, 0 sinon quand on avance
-	protected int whatColor(Color c, boolean affichage) {
+	protected int whatColor(Couleur c) {
+		return whatColor(c, false);
+	}
+
+	protected int whatColor(Couleur c, boolean affichage) {
 		for (int i = 0; i < this.distanceColor.size(); i++) {
 			this.distanceColor.get(i).setDistance(this.distanceColor.get(i).getColor().euclide(c));
 		}
@@ -67,13 +72,13 @@ public class FindColor {
 		if (index == this.distanceColor.size()) {
 			if (affichage == true) {
 				LCD.drawString(" Color not found", 0, 4);
-				Delay.msDelay(Util.DELAY);
+				Delay.msDelay(DELAY);
 			}
 			return -1;
 		} else {
 			if (affichage == true) {
 				LCD.drawString("color : " + index, 0, 4);
-				Delay.msDelay(Util.DELAY);
+				Delay.msDelay(DELAY);
 			}
 			return index;
 		}
@@ -146,8 +151,9 @@ public class FindColor {
 	}
 
 	public static void main(String[] args) {
-		FindColor find = new FindColor();
-		find.whatColor(Util.lireColor(), true);
+		Robot robot = new Robot();
+		FindColor find = new FindColor(robot.NAMEFILE);
+		find.whatColor(robot.lireColor(), true);
 	}
 
 }

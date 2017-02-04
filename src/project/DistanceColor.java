@@ -2,19 +2,19 @@ package project;
 
 public class DistanceColor {
 
-	private Color color;
+	private Couleur color;
 	private float distance;
 
-	public DistanceColor(Color color, float distance) {
+	public DistanceColor(Couleur color, float distance) {
 		this.color = color;
 		this.distance = distance;
 	}
 
-	protected Color getColor() {
+	protected Couleur getColor() {
 		return color;
 	}
 
-	protected void setColor(Color color) {
+	protected void setColor(Couleur color) {
 		this.color = color;
 	}
 
