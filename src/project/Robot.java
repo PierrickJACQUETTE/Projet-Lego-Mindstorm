@@ -1,133 +1,144 @@
 package project;
 
-import lejos.hardware.lcd.LCD;
+import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.MotorPort;
+import lejos.hardware.sensor.HiTechnicColorSensor;
 import lejos.robotics.RegulatedMotor;
+import lejos.robotics.SampleProvider;
 import lejos.utility.Delay;
 
 public class Robot {
 
-	RegulatedMotor right, left;
+	protected final String NAMEFILE = "Couleur.txt";
+	protected final short SUIVRE = 1;
+	protected final short VITESSEMOYENNE;
 
-	int roueDiam = 5;
-	int roboDiam = 15;
-
-	int direction = 1;
-	int ligne = 1;
-	int courbe = 1;
-	final short SUIVRE = 1;
-	final short VITESSEMOYENNE;
+	private RegulatedMotor right, left;
+	private HiTechnicColorSensor ecs;
+	private SampleProvider colorRGBSensor;
+	private int direction;
+	private int ligne;
+	private int courbe;
 
 	public Robot() {
-		right = new EV3LargeRegulatedMotor(MotorPort.B);
-		left = new EV3LargeRegulatedMotor(MotorPort.D);
+		this.right = new EV3LargeRegulatedMotor(MotorPort.B);
+		this.left = new EV3LargeRegulatedMotor(MotorPort.D);
 		this.VITESSEMOYENNE = (short) ((right.getSpeed() < left.getSpeed()) ? right.getSpeed() : left.getSpeed());
+		this.ecs = new HiTechnicColorSensor(LocalEV3.get().getPort("S1"));
+		this.colorRGBSensor = ecs.getRGBMode();
+		this.direction = 1;
+		this.ligne = 1;
+		this.courbe = 1;
+	}
+
+	public void robotFin() {
+		this.ecs.close();
+		this.right.stop();
+		this.left.stop();
+	}
+
+	protected void avance() {
+		this.avance("devant");
+	}
+
+	protected void avance(String direction) {
+		this.begSync();
+		switch (direction) {
+		case "devant":
+			this.right.forward();
+			this.left.forward();
+			break;
+		case "gauche":
+			this.left.backward();
+			this.right.forward();
+			break;
+		case "droite":
+			this.right.backward();
+			this.left.forward();
+			break;
+		default:
+			break;
+		}
+		this.endSync();
+	}
+
+	protected Couleur lireColor() {
+		int sampleSize = this.colorRGBSensor.sampleSize();
+		float[] sample = new float[sampleSize];
+		this.colorRGBSensor.fetchSample(sample, 0);
+		short tmp = 0;
+		return new Couleur(this.convertToRGB(sample[0]), this.convertToRGB(sample[1]), this.convertToRGB(sample[2]),
+				tmp);
+	}
+
+	private float convertToRGB(float f) {
+		return f * 255f;
 	}
 
 	public void begSync() {
-		left.synchronizeWith(new RegulatedMotor[] { right });
-		right.startSynchronization();
-	}
-
-	public void avance() {
-		right.forward();
-		left.forward();
+		this.left.startSynchronization();
+		this.right.startSynchronization();
 	}
 
 	public void endSync() {
-		right.endSynchronization();
+		this.right.endSynchronization();
+		this.left.endSynchronization();
 		Delay.msDelay(10);
 	}
 
-	// ATTENTION LES MOTEURS SONT EN 3:1
-	// On calcule le rapport distance avec le diametre de la roue. Puis en
-	// convertit en degree.
-	public void avance(int distance) {
-		int deg = (int) Math.round((distance / roueDiam) * 360.0) / 3;
-		right.rotate(deg, true);
-		left.rotate(deg);
-	}
-
-	/*
-	 * Tourne a droite roboDiam * PI represente la distance que parcours le
-	 * robot en faisant un tour complet sur lui meme. Ici on veux juste 90% donc
-	 * on divise par 4 [360/4]. On fait ensuite la conversion en degree.
-	 */
-	public void pivotD(int ang) {
-		int deg = (int) Math.round((((roboDiam * Math.PI) / (360 / ang)) / roueDiam) * 360.0) / 3;
-		right.rotate(-deg, true);
-		left.rotate(deg);
-	}
-
-	public void pivotG(int ang) {
-		int deg = (int) Math.round((((roboDiam * Math.PI) / (360 / ang)) / roueDiam) * 360.0) / 3;
-		left.rotate(-deg, true);
-		right.rotate(deg);
-	}
-
-	public void tourneD() {
-		int tmp = 2;
-		right.setSpeed(right.getSpeed() / tmp);
-		this.begSync();
-		this.avance();
-		this.endSync();
-		right.setSpeed(right.getSpeed() * tmp);
-	}
-
-	public void tourneG() {
-		int tmp = 2;
-		left.setSpeed(left.getSpeed() / tmp);
-		this.begSync();
-		this.avance();
-		this.endSync();
-		left.setSpeed(left.getSpeed() * tmp);
-	}
-
-	public void mytourneD() {
-		if (courbe == 3) {
-			int tmp = right.getSpeed() / courbe;
-			tmp = (tmp < 0) ? 0 : tmp; // 0 ou vitesse actuelle a voir....
-			right.setSpeed(tmp);
+	public void tourne(int dir) {
+		if (this.courbe == 3) {
+			int tmp = (dir == 2) ? this.left.getSpeed() : this.right.getSpeed();
+			tmp /= this.courbe;
+			tmp = (tmp < 0) ? 0 : tmp;
+			if (dir == 2) {
+				this.left.setSpeed(tmp);
+			} else {
+				this.right.setSpeed(tmp);
+			}
 		}
-		// agir sur roue gauche ?
-		this.begSync();
 		this.avance();
-		this.endSync();
-	}
-
-	public void mytourneG() {
-		if (courbe == 3) {
-			int tmp = left.getSpeed() / courbe;
-			tmp = (tmp < 0) ? 0 : tmp; // 0 ou vitesse actuelle a voir....
-			left.setSpeed(tmp);
-		}
-		// agir sur roue droite ?
-		this.begSync();
-			this.avance();
-		this.endSync();
-	}
-
-	public void mypivotD(int tentative) {
-		right.setSpeed(VITESSEMOYENNE/tentative);
-		left.setSpeed(VITESSEMOYENNE);
-	}
-
-	public void mypivotG(int tentative) {
-		
-		left.setSpeed(VITESSEMOYENNE/tentative);
-		right.setSpeed(VITESSEMOYENNE);
 	}
 
 	public void accelerer() {
-		right.setSpeed(30 + right.getSpeed());
-		left.setSpeed(30 + left.getSpeed());
-		courbe = 1;
+		changeVitesse(left.getSpeed() + 30, right.getSpeed() + 30);
 	}
 
-	public void ralentir() {
-		right.setSpeed(VITESSEMOYENNE);
-		left.setSpeed(VITESSEMOYENNE);
-		ligne = 1;
+	public void decelerer() {
+		changeVitesse(left.getSpeed() - 30, right.getSpeed() - 30);
+	}
+
+	public void vitesseMoyenne() {
+		changeVitesse(VITESSEMOYENNE, VITESSEMOYENNE);
+	}
+
+	protected void changeVitesse(int vitesseGauche, int vitesseDroit) {
+		this.right.setSpeed(vitesseDroit);
+		this.left.setSpeed(vitesseGauche);
+	}
+
+	public int getDirection() {
+		return this.direction;
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+
+	public int getLigne() {
+		return this.ligne;
+	}
+
+	public void setLigne(int ligne) {
+		this.ligne = ligne;
+	}
+
+	protected int getCourbe() {
+		return this.courbe;
+	}
+
+	protected void setCourbe(int courbe) {
+		this.courbe = courbe;
 	}
 }
