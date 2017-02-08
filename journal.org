@@ -1,11 +1,15 @@
-* <2017-01-125>
-*** Fait:
+* <2017-02-08>
+** Fait:
+   - Détection de courbure
+** À faire:
+   - Essayer de contrôler le différentiel de vitesse, on déctecte le rayon de courbure (même approximativement) et on en déduit le différentiel à utiliser lorsqu'on a retrouvé la ligne...
+   - conserver la direction antérieure de correction pour la recherche de la ligne
+* <2017-01-25>
+** Fait:
     - Étallonage très vite
-*** A Faire:
+** A Faire:
     - Color recognition qui marche hors de tapis (maintenant l'algo dit toujours "noir")
     - Zigaguer et changer dynamiquement la vitesse des moteurs
-
-
 * <2016-12-09>
 ** Fait:
   - Un algorithme de suivi de ligne
