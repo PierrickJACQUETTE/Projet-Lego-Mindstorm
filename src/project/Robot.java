@@ -1,7 +1,9 @@
 package project;
 
 import lejos.hardware.ev3.LocalEV3;
+import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
+import lejos.hardware.port.I2CException;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.sensor.HiTechnicColorSensor;
 import lejos.robotics.RegulatedMotor;
@@ -20,6 +22,8 @@ public class Robot {
 	private int direction;
 	private int ligne;
 	private int courbe;
+
+	private boolean inversion;
 
 	public Robot() {
 		this.right = new EV3LargeRegulatedMotor(MotorPort.B);
@@ -66,7 +70,11 @@ public class Robot {
 	protected Couleur lireColor() {
 		int sampleSize = this.colorRGBSensor.sampleSize();
 		float[] sample = new float[sampleSize];
-		this.colorRGBSensor.fetchSample(sample, 0);
+		try {
+			this.colorRGBSensor.fetchSample(sample, 0);
+		} catch (I2CException e) {
+			this.colorRGBSensor.fetchSample(sample, 0);
+		}
 		short tmp = 0;
 		return new Couleur(this.convertToRGB(sample[0]), this.convertToRGB(sample[1]), this.convertToRGB(sample[2]),
 				tmp);
@@ -88,7 +96,7 @@ public class Robot {
 	}
 
 	public void tourne(int dir) {
-		if (this.courbe == 3) {
+		if (this.courbe % 10 == 3) {
 			int tmp = (dir == 2) ? this.left.getSpeed() : this.right.getSpeed();
 			tmp /= this.courbe;
 			tmp = (tmp < 0) ? 0 : tmp;
@@ -98,6 +106,7 @@ public class Robot {
 				this.right.setSpeed(tmp);
 			}
 		}
+		inversion = true;
 		this.avance();
 	}
 
