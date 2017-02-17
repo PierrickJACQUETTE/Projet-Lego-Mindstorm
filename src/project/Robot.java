@@ -70,10 +70,14 @@ public class Robot {
 	protected Couleur lireColor() {
 		int sampleSize = this.colorRGBSensor.sampleSize();
 		float[] sample = new float[sampleSize];
-		try {
-			this.colorRGBSensor.fetchSample(sample, 0);
-		} catch (I2CException e) {
-			this.colorRGBSensor.fetchSample(sample, 0);
+		boolean erreur = true;
+		while (erreur == true) {
+			try {
+				this.colorRGBSensor.fetchSample(sample, 0);
+				erreur = false;
+			} catch (I2CException e) {
+				erreur = true;
+			}
 		}
 		short tmp = 0;
 		return new Couleur(this.convertToRGB(sample[0]), this.convertToRGB(sample[1]), this.convertToRGB(sample[2]),
@@ -94,6 +98,20 @@ public class Robot {
 		this.left.endSynchronization();
 		Delay.msDelay(10);
 	}
+	
+	public void suiteTourne(int dir) {
+		if (this.courbe % 10 == 3) {
+			if (dir == 2) {
+				this.right.setSpeed(VITESSEMOYENNE);
+				this.left.setSpeed(this.left.getSpeed()+100);
+			} else {
+				this.left.setSpeed(VITESSEMOYENNE);
+				this.right.setSpeed(this.right.getSpeed()+100);
+			}
+		}
+		inversion = true;
+		this.avance();
+	}
 
 	public void tourne(int dir) {
 		if (this.courbe % 10 == 3) {
@@ -101,8 +119,10 @@ public class Robot {
 			tmp /= this.courbe;
 			tmp = (tmp < 0) ? 0 : tmp;
 			if (dir == 2) {
+				this.right.setSpeed(VITESSEMOYENNE);
 				this.left.setSpeed(tmp);
 			} else {
+				this.left.setSpeed(VITESSEMOYENNE);
 				this.right.setSpeed(tmp);
 			}
 		}
