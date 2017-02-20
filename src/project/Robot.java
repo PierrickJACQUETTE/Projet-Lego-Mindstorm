@@ -74,6 +74,7 @@ public class Robot {
 		while (erreur == true) {
 			try {
 				this.colorRGBSensor.fetchSample(sample, 0);
+				LCD.drawString("Succes Fetch", 0, 1);
 				erreur = false;
 			} catch (I2CException e) {
 				erreur = true;
