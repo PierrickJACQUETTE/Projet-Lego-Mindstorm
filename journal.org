@@ -1,9 +1,12 @@
+* <2017-02-22>
+** À faire:
+   - Continuer la reflexion sur la détection de courbure à l'aide du Navigator?
 * <2017-02-08>
 ** Fait:
    - Détection de courbure
 ** À faire:
    - Essayer de contrôler le différentiel de vitesse, on déctecte le rayon de courbure (même approximativement) et on en déduit le différentiel à utiliser lorsqu'on a retrouvé la ligne...
-   - conserver la direction antérieure de correction pour la recherche de la ligne
+   - Conserver la direction antérieure de correction pour la recherche de la ligne
 * <2017-01-25>
 ** Fait:
     - Étallonage très vite
