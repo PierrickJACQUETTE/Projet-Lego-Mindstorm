@@ -1,7 +1,5 @@
 package project;
 
-import lejos.hardware.lcd.LCD;
-
 public class Follow {
 
 	private Robot ev3;
@@ -20,7 +18,7 @@ public class Follow {
 		find = new FindColor(ev3.NAMEFILE);
 	}
 
-	protected void ligneDroite() {
+	protected void ligneDroite() throws InterruptedException {
 		boolean accelerer = true;
 		while (ev3.SUIVRE == seenColor) {
 			ev3.begSync();
@@ -41,7 +39,7 @@ public class Follow {
 		}
 	}
 
-	protected void pivot() {
+	protected void pivot() throws InterruptedException {
 		while (seenColor != ev3.SUIVRE && c < 10) {
 			if (c % 2 == 0) {
 				ev3.avance("droite");
@@ -72,7 +70,7 @@ public class Follow {
 		}
 	}
 
-	protected void tourne() {
+	protected void tourne() throws InterruptedException {
 		int direction = ev3.getDirection();
 		while (seenColor != ev3.SUIVRE) {
 			ev3.tourne(direction);
@@ -85,7 +83,7 @@ public class Follow {
 		}
 	}
 
-	protected void start() {
+	protected void start() throws InterruptedException {
 		c = 0;
 		lastC = 0;
 		georges = 0;
@@ -121,7 +119,7 @@ public class Follow {
 		ev3.robotFin();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Follow f = new Follow();
 		f.start();
 	}

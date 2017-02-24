@@ -150,7 +150,7 @@ public class FindColor {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Robot robot = new Robot();
 		FindColor find = new FindColor(robot.NAMEFILE);
 		find.whatColor(robot.lireColor(), true);

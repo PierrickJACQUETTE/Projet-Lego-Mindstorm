@@ -2,6 +2,7 @@ package project;
 
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
+import lejos.hardware.Button;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.I2CException;
 import lejos.hardware.port.MotorPort;
@@ -67,7 +68,7 @@ public class Robot {
 		this.endSync();
 	}
 
-	protected Couleur lireColor() {
+	protected Couleur lireColor() throws InterruptedException {
 		int sampleSize = this.colorRGBSensor.sampleSize();
 		float[] sample = new float[sampleSize];
 		boolean erreur = true;
@@ -77,9 +78,12 @@ public class Robot {
 				erreur = false;
 			} catch (I2CException e) {
 			    LCD.drawString("Une erreur est apparue lors du fetch", 0, 1);
+			    Button.LEDPattern(17);
 				erreur = true;
+				Thread.sleep(20);
 			}
 		}
+		Thread.sleep(10);
 		short tmp = 0;
 		return new Couleur(this.convertToRGB(sample[0]), this.convertToRGB(sample[1]), this.convertToRGB(sample[2]),
 				tmp);
@@ -104,10 +108,10 @@ public class Robot {
 		if (this.courbe % 10 == 3) {
 			if (dir == 2) {
 				this.right.setSpeed(VITESSEMOYENNE);
-				this.left.setSpeed(this.left.getSpeed()+100);
+				this.left.setSpeed(this.left.getSpeed()+50);
 			} else {
 				this.left.setSpeed(VITESSEMOYENNE);
-				this.right.setSpeed(this.right.getSpeed()+100);
+				this.right.setSpeed(this.right.getSpeed()+50);
 			}
 		}
 		inversion = true;
@@ -120,9 +124,11 @@ public class Robot {
 			tmp /= this.courbe;
 			tmp = (tmp < 0) ? 0 : tmp;
 			if (dir == 2) {
+				Button.LEDPattern(1);
 				this.right.setSpeed(VITESSEMOYENNE);
 				this.left.setSpeed(tmp);
 			} else {
+				Button.LEDPattern(2);
 				this.left.setSpeed(VITESSEMOYENNE);
 				this.right.setSpeed(tmp);
 			}

@@ -1,6 +1,7 @@
 package project;
 
 import lejos.hardware.Button;
+import lejos.hardware.Sound;
 
 public class Follow2 {
 
@@ -21,7 +22,7 @@ public class Follow2 {
 		find = new FindColor(ev3.NAMEFILE);
 	}
 
-	protected void ligneDroite() {
+	protected void ligneDroite() throws InterruptedException {
 		boolean accelerer = true;
 		while (ev3.SUIVRE == seenColor) {
 			ev3.begSync();
@@ -42,16 +43,11 @@ public class Follow2 {
 		}
 	}
 
-	protected void pivot() {
+	protected void pivot() throws InterruptedException {
 		while (seenColor != ev3.SUIVRE && c < 10) {
-			if (c % 2 == 0) {
-				ev3.avance("droite");
-			} else {
-				ev3.avance("gauche");
-			}
 			if (first) {
-				c = (lastC % 2 == 0) ? 0 : 1;
-				switch (c % 2) {
+				c = lastC % 2;
+				switch (c) {
 				case 0:
 					ev3.setDirection(0);
 					georges++;
@@ -61,6 +57,13 @@ public class Follow2 {
 					break;
 				}
 				first = false;
+			}
+			else{
+				if (c % 2 == 0) {
+					ev3.avance("droite");
+				} else {
+					ev3.avance("gauche");
+				}
 			}
 			if (System.currentTimeMillis() - times > times2) {
 				c++;
@@ -73,7 +76,7 @@ public class Follow2 {
 		}
 	}
 	
-	protected void suiteTourne() {
+	protected void suiteTourne() throws InterruptedException {
 		int direction = ev3.getDirection();
 		while (seenColor == ev3.SUIVRE) {
 			ev3.suiteTourne(direction);
@@ -87,7 +90,7 @@ public class Follow2 {
 		ev3.setDirection(1);
 	}
 
-	protected void tourne() {
+	protected void tourne() throws InterruptedException {
 		int direction = ev3.getDirection();
 		while (seenColor != ev3.SUIVRE) {
 			ev3.tourne(direction);
@@ -99,9 +102,9 @@ public class Follow2 {
 		}
 	}
 
-	protected void start() {
+	protected void start() throws InterruptedException {
 		c = 0;
-		lastC = 0;
+		lastC=0;
 		georges = 0;
 		lastDirection = 1;
 		tourne = false;
@@ -111,9 +114,7 @@ public class Follow2 {
 			seenColor = find.whatColor(ev3.lireColor());
 			if (tourne == false) {
 				ev3.setLigne(1);
-				Button.LEDPattern(1);
 				ligneDroite();
-				Button.LEDPattern(0);
 			} else {
 				suiteTourne();
 				tourne = false;
@@ -129,7 +130,6 @@ public class Follow2 {
 				ev3.changeVitesse(150, 150);
 				pivot();
 			} else {
-				Button.LEDPattern(2);
 				ev3.vitesseMoyenne();
 				tourne();
 				tourne = true;
@@ -146,7 +146,7 @@ public class Follow2 {
 		ev3.robotFin();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Follow2 f = new Follow2();
 		f.start();
 		f.ev3.robotFin();

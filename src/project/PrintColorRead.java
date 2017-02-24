@@ -6,7 +6,7 @@ import lejos.utility.Delay;
 
 public class PrintColorRead {
 
-	public static void main(String[] a) {
+	public static void main(String[] a) throws InterruptedException {
 		Robot robot = new Robot();
 		boolean loop = true;
 		while (loop) {

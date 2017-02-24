@@ -28,7 +28,7 @@ public class CalibrationCapteur {
 	 * LCD.drawString("pour ajout", 1, 4); LCD.drawString( "Appuyer sur DROITE",
 	 * 0, 5); LCD.drawString("pour new color", 1, 6);
 	 */
-	protected void start() {
+	protected void start() throws InterruptedException {
 		boolean ok = false;
 		boolean loop = true;
 		while (loop) {
@@ -67,7 +67,7 @@ public class CalibrationCapteur {
 		this.p.close();
 	}
 
-	private void write(int releve) {
+	private void write(int releve) throws InterruptedException {
 		this.couleur = this.robot.lireColor();
 		this.couleur.setName(this.name);
 		this.p.println(this.couleur);
@@ -96,7 +96,7 @@ public class CalibrationCapteur {
 		LCD.clearDisplay();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		CalibrationCapteur test = new CalibrationCapteur();
 		test.start();
 
