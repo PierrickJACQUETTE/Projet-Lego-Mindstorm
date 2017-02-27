@@ -2,7 +2,6 @@ package project;
 
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
-import lejos.hardware.Button;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.port.I2CException;
 import lejos.hardware.port.MotorPort;
@@ -24,7 +23,7 @@ public class Robot {
 	private int ligne;
 	private int courbe;
 
-	private boolean inversion;
+	//private boolean inversion;
 
 	public Robot() {
 		this.right = new EV3LargeRegulatedMotor(MotorPort.B);
@@ -44,21 +43,29 @@ public class Robot {
 	}
 
 	protected void avance() {
-		this.avance("devant");
+		this.avance(1);
 	}
 
-	protected void avance(String direction) {
+	/*
+	 * actionne les roues en fonction de la direction
+	 * 
+	 * direction 
+	 * 1 tout droit
+	 * 2 gauche
+	 * 0 droite
+	 */
+	protected void avance(int direction) {
 		this.begSync();
 		switch (direction) {
-		case "devant":
+		case 1:
 			this.right.forward();
 			this.left.forward();
 			break;
-		case "gauche":
+		case 2:
 			this.left.backward();
 			this.right.forward();
 			break;
-		case "droite":
+		case 0:
 			this.right.backward();
 			this.left.forward();
 			break;
@@ -68,25 +75,23 @@ public class Robot {
 		this.endSync();
 	}
 
+	/*
+	 * lit la couleur tant qu'il y a pas d'erreur et la renvoie
+	 */
 	protected Couleur lireColor() throws InterruptedException {
-		int sampleSize = this.colorRGBSensor.sampleSize();
-		float[] sample = new float[sampleSize];
-		boolean erreur = true;
-		while (erreur == true) {
+		float[] sample = new float[this.colorRGBSensor.sampleSize()];
+		while (true) {
 			try {
 				this.colorRGBSensor.fetchSample(sample, 0);
-				erreur = false;
+				break;
 			} catch (I2CException e) {
 			    LCD.drawString("Une erreur est apparue lors du fetch", 0, 1);
-			    Button.LEDPattern(17);
-				erreur = true;
 				Thread.sleep(20);
 			}
 		}
 		Thread.sleep(10);
-		short tmp = 0;
 		return new Couleur(this.convertToRGB(sample[0]), this.convertToRGB(sample[1]), this.convertToRGB(sample[2]),
-				tmp);
+				(short)0);
 	}
 
 	private float convertToRGB(float f) {
@@ -104,6 +109,13 @@ public class Robot {
 		Delay.msDelay(10);
 	}
 	
+	/*
+	 * permet de tourner progressivement en fonction de la direction en appliquant une contre poussee pour rester le trait
+	 * direction 
+	 * 1 tout droit
+	 * 2 gauche
+	 * 0 droite
+	 */
 	public void suiteTourne(int dir) {
 		if (this.courbe % 10 == 3) {
 			if (dir == 2) {
@@ -114,26 +126,24 @@ public class Robot {
 				this.right.setSpeed(this.right.getSpeed()+50);
 			}
 		}
-		inversion = true;
 		this.avance();
 	}
 
+	/*
+	 * permet de tourner : presque la meme fonction que suiteTourne, suiteTourne code provisoire
+	 * 
+	 * permet de tourner progressivement en fonction de la direction 
+	 */
 	public void tourne(int dir) {
 		if (this.courbe % 10 == 3) {
-			int tmp = (dir == 2) ? this.left.getSpeed() : this.right.getSpeed();
-			tmp /= this.courbe;
-			tmp = (tmp < 0) ? 0 : tmp;
 			if (dir == 2) {
-				Button.LEDPattern(1);
 				this.right.setSpeed(VITESSEMOYENNE);
-				this.left.setSpeed(tmp);
+				this.left.setSpeed(this.left.getSpeed()/this.courbe);
 			} else {
-				Button.LEDPattern(2);
 				this.left.setSpeed(VITESSEMOYENNE);
-				this.right.setSpeed(tmp);
+				this.right.setSpeed(this.right.getSpeed()/this.courbe);
 			}
 		}
-		inversion = true;
 		this.avance();
 	}
 
