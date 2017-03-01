@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
@@ -12,18 +13,24 @@ import lejos.utility.Delay;
 public class FindColor {
 
 	private final short DELAY = 500;
-	private ArrayList<DistanceColor> distanceColor;
+	private List<DistanceColor> distanceColor;
 	private int ensemble;
 
+	/**
+	 * Constructeur qui permet de recuperer toutes les couleurs connues
+	 * 
+	 * @param name
+	 *            nom du fichier ou son stocker les couleurs
+	 */
 	public FindColor(String name) {
-
 		this.distanceColor = this.readFile(name);
 		this.ensemble = this.distanceColor.size() / nbColour();
 	}
 
+	// permet de connaitre le nombre de couleur connue
 	private int nbColour() {
 		int cpt = 0;
-		ArrayList<Short> idColor = new ArrayList<Short>();
+		List<Short> idColor = new ArrayList<Short>();
 		for (DistanceColor d : this.distanceColor) {
 			if (!idColor.contains(d.getColor().getName())) {
 				cpt++;
@@ -33,8 +40,10 @@ public class FindColor {
 		return cpt;
 	}
 
-	private ArrayList<DistanceColor> readFile(String name) {
-		ArrayList<DistanceColor> list = new ArrayList<DistanceColor>();
+	// permet de lire de file avec les couleurs connues et les stockes dans une
+	// list
+	private List<DistanceColor> readFile(String name) {
+		List<DistanceColor> list = new ArrayList<DistanceColor>();
 		try {
 			BufferedReader fluxEntree = new BufferedReader(new FileReader(name));
 			String ligne;
@@ -57,18 +66,38 @@ public class FindColor {
 		return list;
 	}
 
-	// affichage 1 quand find, 0 sinon quand on avance
+	//
+	/**
+	 * methode permettant de determiner quelle est le nom de la couleur de lon
+	 * lit en fonction des couleurs que lon connait affichage false
+	 * 
+	 * @param c
+	 *            couleur lue
+	 * @return le nom de la couleur la plus proche
+	 */
 	protected int whatColor(Couleur c) {
 		return whatColor(c, false);
 	}
 
+	/**
+	 * methode permettant de determiner quelle est le nom de la couleur de lon
+	 * lit en fonction des couleurs que lon connait, affichage true quand find,
+	 * false sinon quand on avance
+	 * 
+	 * @param c
+	 *            couleur lue
+	 * @param affichage
+	 *            savoir si l on affiche sur l ecran le resultat
+	 * @return le nom de la couleur la plus proche
+	 */
 	protected int whatColor(Couleur c, boolean affichage) {
+		// on calcul pour chaque couleur connu la distance par rapport a la
+		// couleur lue
 		for (int i = 0; i < this.distanceColor.size(); i++) {
 			this.distanceColor.get(i).setDistance(this.distanceColor.get(i).getColor().euclide(c));
 		}
 		triFusion(this.distanceColor);
 		int index = this.maxOccurence(this.ensemble);
-
 		if (index == this.distanceColor.size()) {
 			if (affichage == true) {
 				LCD.drawString(" Color not found", 0, 4);
@@ -91,8 +120,11 @@ public class FindColor {
 		int index2 = this.distanceColor.size();
 		int[] nbrOccurrence = new int[ensemble + 1];
 		for (int i = 0; i < ensemble; i++) {
+			// compte le nombre d occurence d une couleur
 			nbrOccurrence[this.distanceColor.get(i).getColor().getName()]++;
 		}
+		// permet de connaitre la couleur la plus proche d apres son nombre d
+		// occurrence
 		for (int i = 0; i < nbrOccurrence.length; i++) {
 			if (nbrOccurrence[i] >= max1) {
 				max2 = max1;
@@ -108,14 +140,14 @@ public class FindColor {
 		return (max1 > max2) ? index1 : (ensemble++ < this.distanceColor.size()) ? maxOccurence(ensemble++) : index2;
 	}
 
-	private static void triFusion(ArrayList<DistanceColor> tableau) {
+	private static void triFusion(List<DistanceColor> tableau) {
 		int longueur = tableau.size();
 		if (longueur > 0) {
 			triFusion(tableau, 0, longueur - 1);
 		}
 	}
 
-	private static void triFusion(ArrayList<DistanceColor> tableau, int deb, int fin) {
+	private static void triFusion(List<DistanceColor> tableau, int deb, int fin) {
 		if (deb != fin) {
 			int milieu = (fin + deb) / 2;
 			triFusion(tableau, deb, milieu);
@@ -124,7 +156,7 @@ public class FindColor {
 		}
 	}
 
-	private static void fusion(ArrayList<DistanceColor> tableau, int deb1, int fin1, int fin2) {
+	private static void fusion(List<DistanceColor> tableau, int deb1, int fin1, int fin2) {
 		int deb2 = fin1 + 1;
 
 		ArrayList<DistanceColor> table1 = new ArrayList<DistanceColor>();

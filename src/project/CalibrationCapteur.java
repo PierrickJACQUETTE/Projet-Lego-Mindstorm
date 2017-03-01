@@ -16,17 +16,24 @@ public class CalibrationCapteur {
 	private short name;
 	Robot robot;
 
+	/**
+	 * Constructeur pour apprendre les couleurs au robot Il ecrit les releves
+	 * dans un fichier avec un entier pour chaque couleur
+	 */
 	public CalibrationCapteur() {
 		this.robot = new Robot();
 		this.p = initFile();
 		this.name = 0;
 	}
 
-	/*
-	 * LCD.drawString("Appuyer sur ESCAPE", 0, 1); LCD.drawString(
-	 * "pour stopper", 1, 2); LCD.drawString("Appuyer sur HAUT", 0, 3);
-	 * LCD.drawString("pour ajout", 1, 4); LCD.drawString( "Appuyer sur DROITE",
-	 * 0, 5); LCD.drawString("pour new color", 1, 6);
+	/**
+	 * Quand on appuit sur le boutton du haut du robot, lit fois une couleur
+	 * puis l ecrit dans le fichier, la lecture a lieu 10 fois de suite Quand on
+	 * appuit sur le boutton de droite du robot, il passe a la couleur suivante
+	 * Quand on appuit sur le boutton escape alors on finit l apprentissage des
+	 * couleurs
+	 * 
+	 * @throws InterruptedException
 	 */
 	protected void start() throws InterruptedException {
 		boolean ok = false;
@@ -36,7 +43,8 @@ public class CalibrationCapteur {
 			case Button.ID_UP:
 				LCD.drawString("Start pour " + name, 0, 3);
 				for (int i = 0; i < 10; i++) {
-					this.write(i);
+					this.couleur = this.robot.lireColor();
+					this.write();
 					try {
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
@@ -67,12 +75,17 @@ public class CalibrationCapteur {
 		this.p.close();
 	}
 
-	private void write(int releve) throws InterruptedException {
-		this.couleur = this.robot.lireColor();
+	/**
+	 * Methode qui ecrit une couleur dans le fichier
+	 */
+	private void write() throws InterruptedException {
 		this.couleur.setName(this.name);
 		this.p.println(this.couleur);
 	}
 
+	/**
+	 * Fonction permettant de lire dans un fichier
+	 */
 	private PrintWriter initFile() {
 		PrintWriter p = null;
 		try {
@@ -91,6 +104,9 @@ public class CalibrationCapteur {
 		return p;
 	}
 
+	/**
+	 * Fonction permet de supprimer le texte afficher sur l ecran du robot
+	 */
 	private void delayClearLCD() {
 		Delay.msDelay(500);
 		LCD.clearDisplay();
