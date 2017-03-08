@@ -75,7 +75,7 @@ public class FindColor {
 	 *            couleur lue
 	 * @return le nom de la couleur la plus proche
 	 */
-	protected int whatColor(Couleur c) {
+	public int whatColor(Couleur c) {
 		return whatColor(c, false);
 	}
 
@@ -182,7 +182,7 @@ public class FindColor {
 		}
 	}
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		Robot robot = new Robot();
 		FindColor find = new FindColor(robot.NAMEFILE);
 		find.whatColor(robot.lireColor(), true);

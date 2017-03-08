@@ -35,7 +35,7 @@ public class CalibrationCapteur {
 	 * 
 	 * @throws InterruptedException
 	 */
-	protected void start() throws InterruptedException {
+	protected void start(){
 		boolean ok = false;
 		boolean loop = true;
 		while (loop) {
@@ -78,7 +78,7 @@ public class CalibrationCapteur {
 	/**
 	 * Methode qui ecrit une couleur dans le fichier
 	 */
-	private void write() throws InterruptedException {
+	private void write() {
 		this.couleur.setName(this.name);
 		this.p.println(this.couleur);
 	}
@@ -112,7 +112,7 @@ public class CalibrationCapteur {
 		LCD.clearDisplay();
 	}
 
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		CalibrationCapteur test = new CalibrationCapteur();
 		test.start();
 
