@@ -1,3 +1,6 @@
+* <2017-03-08>
+** À faire:
+   - Utiliser l'algorithme de base pour faire un relevé des points de sortie et les utiliser pour observer la suite des rayons de courbure pbtenus par détermination du cercle ciconscrit à trois points, on devrait voir apparaître des sous-suites de raoyns différents
 * <2017-02-22>
 ** À faire:
    - Continuer la reflexion sur la détection de courbure à l'aide du Navigator?
