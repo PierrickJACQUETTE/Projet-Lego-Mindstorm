@@ -1,3 +1,8 @@
+* <2017-03-22>
+** Fait:
+   - relevé des points, calcul du rayon, stockage du circuit
+** À faire:
+   - établir la fonction distance -> courbure, de sorte qu'au second tour on puisse savoir quel rayon utiliser ?
 * <2017-03-08>
 ** À faire:
    - Utiliser l'algorithme de base pour faire un relevé des points de sortie et les utiliser pour observer la suite des rayons de courbure pbtenus par détermination du cercle ciconscrit à trois points, on devrait voir apparaître des sous-suites de raoyns différents
