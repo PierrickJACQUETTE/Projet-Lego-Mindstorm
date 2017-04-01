@@ -1,4 +1,4 @@
-package project;
+package color;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -9,11 +9,12 @@ import java.util.List;
 
 import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
+import project.Robot;
 
 public class FindColor {
 
 	private final short DELAY = 500;
-	private List<DistanceColor> distanceColor;
+	private List<DistanceObjectColor> distanceColor;
 	private int ensemble;
 
 	/**
@@ -31,10 +32,10 @@ public class FindColor {
 	private int nbColour() {
 		int cpt = 0;
 		List<Short> idColor = new ArrayList<Short>();
-		for (DistanceColor d : this.distanceColor) {
-			if (!idColor.contains(d.getColor().getName())) {
+		for (DistanceObjectColor d : this.distanceColor) {
+			if (!idColor.contains(d.getCouleur().getName())) {
 				cpt++;
-				idColor.add(d.getColor().getName());
+				idColor.add(d.getCouleur().getName());
 			}
 		}
 		return cpt;
@@ -42,15 +43,15 @@ public class FindColor {
 
 	// permet de lire de file avec les couleurs connues et les stockes dans une
 	// list
-	private List<DistanceColor> readFile(String name) {
-		List<DistanceColor> list = new ArrayList<DistanceColor>();
+	private List<DistanceObjectColor> readFile(String name) {
+		List<DistanceObjectColor> list = new ArrayList<DistanceObjectColor>();
 		try {
 			BufferedReader fluxEntree = new BufferedReader(new FileReader(name));
 			String ligne;
 			while ((ligne = fluxEntree.readLine()) != null) {
 				String[] read = ligne.split(" ");
 				if (read.length == 4) {
-					list.add(new DistanceColor(new Couleur(Float.parseFloat(read[0]), Float.parseFloat(read[1]),
+					list.add(new DistanceObjectColor(new Couleur(Float.parseFloat(read[0]), Float.parseFloat(read[1]),
 							Float.parseFloat(read[2]), Short.parseShort(read[3])), 9999f));
 				}
 			}
@@ -94,7 +95,7 @@ public class FindColor {
 		// on calcul pour chaque couleur connu la distance par rapport a la
 		// couleur lue
 		for (int i = 0; i < this.distanceColor.size(); i++) {
-			this.distanceColor.get(i).setDistance(this.distanceColor.get(i).getColor().euclide(c));
+			this.distanceColor.get(i).setDistance(this.distanceColor.get(i).getCouleur().euclide(c));
 		}
 		triFusion(this.distanceColor);
 		int index = this.maxOccurence(this.ensemble);
@@ -121,7 +122,7 @@ public class FindColor {
 		int[] nbrOccurrence = new int[ensemble + 1];
 		for (int i = 0; i < ensemble; i++) {
 			// compte le nombre d occurence d une couleur
-			nbrOccurrence[this.distanceColor.get(i).getColor().getName()]++;
+			nbrOccurrence[this.distanceColor.get(i).getCouleur().getName()]++;
 		}
 		// permet de connaitre la couleur la plus proche d apres son nombre d
 		// occurrence
@@ -140,14 +141,14 @@ public class FindColor {
 		return (max1 > max2) ? index1 : (ensemble++ < this.distanceColor.size()) ? maxOccurence(ensemble++) : index2;
 	}
 
-	private static void triFusion(List<DistanceColor> tableau) {
+	private static void triFusion(List<DistanceObjectColor> tableau) {
 		int longueur = tableau.size();
 		if (longueur > 0) {
 			triFusion(tableau, 0, longueur - 1);
 		}
 	}
 
-	private static void triFusion(List<DistanceColor> tableau, int deb, int fin) {
+	private static void triFusion(List<DistanceObjectColor> tableau, int deb, int fin) {
 		if (deb != fin) {
 			int milieu = (fin + deb) / 2;
 			triFusion(tableau, deb, milieu);
@@ -156,10 +157,10 @@ public class FindColor {
 		}
 	}
 
-	private static void fusion(List<DistanceColor> tableau, int deb1, int fin1, int fin2) {
+	private static void fusion(List<DistanceObjectColor> tableau, int deb1, int fin1, int fin2) {
 		int deb2 = fin1 + 1;
 
-		ArrayList<DistanceColor> table1 = new ArrayList<DistanceColor>();
+		ArrayList<DistanceObjectColor> table1 = new ArrayList<DistanceObjectColor>();
 		for (int i = deb1; i <= fin1; i++) {
 			table1.add(tableau.get(i));
 		}

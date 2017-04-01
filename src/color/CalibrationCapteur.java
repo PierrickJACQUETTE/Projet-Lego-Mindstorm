@@ -1,4 +1,4 @@
-package project;
+package color;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
+import project.Robot;
 
 public class CalibrationCapteur {
 
@@ -35,7 +36,7 @@ public class CalibrationCapteur {
 	 * 
 	 * @throws InterruptedException
 	 */
-	protected void start(){
+	protected void start() {
 		boolean ok = false;
 		boolean loop = true;
 		while (loop) {

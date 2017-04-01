@@ -1,4 +1,4 @@
-package project;
+package color;
 
 public class Couleur {
 

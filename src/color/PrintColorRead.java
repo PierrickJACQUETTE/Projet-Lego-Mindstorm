@@ -1,8 +1,9 @@
-package project;
+package color;
 
 import lejos.hardware.Button;
 import lejos.hardware.lcd.LCD;
 import lejos.utility.Delay;
+import project.Robot;
 
 public class PrintColorRead {
 

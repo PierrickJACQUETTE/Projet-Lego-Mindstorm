@@ -1,5 +1,6 @@
 package project;
 
+import color.FindColor;
 import lejos.hardware.Button;
 
 public class Follow {

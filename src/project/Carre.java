@@ -5,41 +5,41 @@ import lejos.hardware.port.MotorPort;
 import lejos.robotics.RegulatedMotor;
 
 public class Carre {
-	
+
 	private static int roueDiam = 5;
 	private static int roboDiam = 15;
-	
-	
-	//ATTENTION LES MOTEURS SONT EN 3:1	
-	
-	/* On calcule le rapport distance avec le diametre de la roue.
-	 * Puis en convertit en degree.
-	 * */	
-	public static void avance(RegulatedMotor x,RegulatedMotor y, int distance){
-		int deg = (int) Math.round((distance/roueDiam)*360.0)/3;
+
+	// ATTENTION LES MOTEURS SONT EN 3:1
+
+	/*
+	 * On calcule le rapport distance avec le diametre de la roue. Puis en
+	 * convertit en degree.
+	 */
+	public static void avance(RegulatedMotor x, RegulatedMotor y, int distance) {
+		int deg = (int) Math.round((distance / roueDiam) * 360.0) / 3;
 		x.rotate(deg, true);
 		y.rotate(deg);
-	}	
-	
-	/* roboDiam * PI represente la distance que parcours le robot en faisant un tour complet sur lui meme.
-	 * Ici on veux juste 90% donc on divise par 4 [360/4].
-	 * On fait ensuite la conversion en degree.
-	 * */
-	public static void tourneD(RegulatedMotor x, RegulatedMotor y, int ang){
-		int deg = (int) Math.round((((roboDiam*Math.PI)/ang)/roueDiam)*360.0)/3;
-		x.rotate(-deg,true);
+	}
+
+	/*
+	 * roboDiam * PI represente la distance que parcours le robot en faisant un
+	 * tour complet sur lui meme. Ici on veux juste 90% donc on divise par 4
+	 * [360/4]. On fait ensuite la conversion en degree.
+	 */
+	public static void tourneD(RegulatedMotor x, RegulatedMotor y, int ang) {
+		int deg = (int) Math.round((((roboDiam * Math.PI) / ang) / roueDiam) * 360.0) / 3;
+		x.rotate(-deg, true);
 		y.rotate(deg);
 	}
-	
-	
-	public static void main(String[] args){
-	
+
+	public static void main(String[] args) {
+
 		RegulatedMotor right = new EV3LargeRegulatedMotor(MotorPort.B);
 		RegulatedMotor left = new EV3LargeRegulatedMotor(MotorPort.D);
-		
-		for(int i = 0; i < 4; i++){
-			avance(right, left, 30); //AVANCE SUR UNE DISTANCE DE 30CM
-			tourneD(right, left, 4); //TOURNE A 90 DEGRES SUR LA DROITE
-		}		
+
+		for (int i = 0; i < 4; i++) {
+			avance(right, left, 30); // AVANCE SUR UNE DISTANCE DE 30CM
+			tourneD(right, left, 4); // TOURNE A 90 DEGRES SUR LA DROITE
+		}
 	}
 }
