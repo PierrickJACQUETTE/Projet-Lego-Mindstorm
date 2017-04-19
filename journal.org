@@ -1,3 +1,11 @@
+* <2017-04-19>
+** Fait:
+   - conserver la direction antérieure de correction pour la recherche de la ligne
+** A faire:
+   - avoir une granularité plus grossière pour représenter l'enchaînement des virages.
+     (on doit pouvoir différentier la perte de la ligne droite qui est un accident
+     de la perte qui est liée à l'entrée dans un virage)
+
 * <2017-03-22>
 ** Fait:
    - relevé des points, calcul du rayon, stockage du circuit
@@ -9,6 +17,7 @@
 * <2017-02-22>
 ** À faire:
    - Continuer la reflexion sur la détection de courbure à l'aide du Navigator?
+=======
 * <2017-02-08>
 ** Fait:
    - Détection de courbure
