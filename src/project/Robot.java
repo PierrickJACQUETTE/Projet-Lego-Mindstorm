@@ -24,8 +24,6 @@ public class Robot {
 	private int ligne;
 	private int courbe;
 
-	private boolean inversion;
-
 	public Robot() {
 		this.right = new EV3LargeRegulatedMotor(MotorPort.B);
 		this.left = new EV3LargeRegulatedMotor(MotorPort.D);
@@ -121,7 +119,6 @@ public class Robot {
 				this.right.setSpeed(this.right.getSpeed() + 50);
 			}
 		}
-		inversion = true;
 		this.avance();
 	}
 
@@ -146,7 +143,6 @@ public class Robot {
 				this.right.setSpeed(tmp);
 			}
 		}
-		inversion = true;
 		this.avance();
 	}
 
@@ -189,20 +185,6 @@ public class Robot {
 
 	protected void setCourbe(int courbe) {
 		this.courbe = courbe;
-	}
-
-	/**
-	 * @return the right
-	 */
-	public RegulatedMotor getRight() {
-		return right;
-	}
-
-	/**
-	 * @return the left
-	 */
-	public RegulatedMotor getLeft() {
-		return left;
 	}
 
 }

@@ -22,33 +22,11 @@ public class Element {
 	}
 
 	/**
-	 * @param point1
-	 *            the point1 to set
-	 */
-	protected void setPoint1(Point point1) {
-		this.point1 = point1;
-	}
-
-	/**
-	 * @return the point2
-	 */
-	protected Point getPoint2() {
-		return point2;
-	}
-
-	/**
 	 * @param point2
 	 *            the point2 to set
 	 */
 	protected void setPoint2(Point point2) {
 		this.point2 = point2;
-	}
-
-	/**
-	 * @return the angle
-	 */
-	protected double getAngle() {
-		return angle;
 	}
 
 	/**
@@ -61,8 +39,6 @@ public class Element {
 
 	@Override
 	public String toString() {
-		// return "Element [point1=" + point1 + ", point2=" + point2 + ",
-		// angle=" + angle + "]";
 		return point1.getX() + " " + point1.getY() + "\n" + point2.getX() + " " + point2.getY() + " " + angle;
 	}
 

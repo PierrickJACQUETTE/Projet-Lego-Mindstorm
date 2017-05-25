@@ -24,8 +24,8 @@ public class Robot {
 	private int direction;
 	private int lastDirection;
 
-	public double angle;
-	public long timeAvance;
+	private double angle;
+	private long timeAvance;
 	private float vitesse;
 
 	public Robot() {
@@ -40,17 +40,6 @@ public class Robot {
 		this.angle = 0;
 		this.timeAvance = 0;
 		this.vitesse = this.right.getSpeed();
-	}
-
-	public void newPose() {
-		/*
-		 * this.wheel1 = WheeledChassis.modelWheel(this.left, 4.2).offset(-6.8);
-		 * this.wheel2 = WheeledChassis.modelWheel(this.right, 4.2).offset(6.8);
-		 * this.chassis = new WheeledChassis(new Wheel[] { wheel1, wheel2 },
-		 * WheeledChassis.TYPE_DIFFERENTIAL); this.pilot = new
-		 * MyMovePilot(chassis); this.opp = new OdometryPoseProvider(pilot);
-		 * this.pose = opp.getPose();
-		 */
 	}
 
 	public void robotFin() {
@@ -96,7 +85,6 @@ public class Robot {
 	public void endSync() {
 		this.right.endSynchronization();
 		this.left.endSynchronization();
-		// Delay.msDelay(10);
 	}
 
 	protected void setVitesse(int vitesseMotorRight, int vitesseMotorLeft) {
@@ -118,6 +106,12 @@ public class Robot {
 		this.endSync();
 	}
 
+	/**
+	 * Calcul le nouveau x et y pour dessiner
+	 * 
+	 * @param pivotDone
+	 *            est ce que le pivot a eu lieu
+	 */
 	protected void setPoint(boolean pivotDone) {
 		float distance = 0;
 		if (pivotDone) {
@@ -171,6 +165,14 @@ public class Robot {
 	 */
 	protected void setLastDirection(int lastDirection) {
 		this.lastDirection = lastDirection;
+	}
+
+	public void setTimeAvance(long timeAvance) {
+		this.timeAvance = timeAvance;
+	}
+
+	public double getAngle() {
+		return angle;
 	}
 
 	protected void stop() {
