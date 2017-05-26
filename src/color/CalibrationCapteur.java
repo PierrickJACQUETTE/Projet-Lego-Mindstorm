@@ -28,6 +28,25 @@ public class CalibrationCapteur {
 	}
 
 	/**
+	 * Quand on appuis sur le boutton UP il effectue 10 releve sur la couleur
+	 * courante
+	 */
+	private void caseButtonUP() {
+		LCD.drawString("Start pour " + name, 0, 3);
+		for (int i = 0; i < 10; i++) {
+			this.couleur = this.robot.lireColor();
+			this.write();
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		LCD.drawString("Finie pour " + name, 0, 3);
+		this.delayClearLCD();
+	}
+
+	/**
 	 * Quand on appuit sur le boutton du haut du robot, lit fois une couleur
 	 * puis l ecrit dans le fichier, la lecture a lieu 10 fois de suite Quand on
 	 * appuit sur le boutton de droite du robot, il passe a la couleur suivante
@@ -42,19 +61,8 @@ public class CalibrationCapteur {
 		while (loop) {
 			switch (Button.waitForAnyEvent()) {
 			case Button.ID_UP:
-				LCD.drawString("Start pour " + name, 0, 3);
-				for (int i = 0; i < 10; i++) {
-					this.couleur = this.robot.lireColor();
-					this.write();
-					try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+				caseButtonUP();
 				ok = true;
-				LCD.drawString("Finie pour " + name, 0, 3);
-				this.delayClearLCD();
 				break;
 			case Button.ID_RIGHT:
 				if (ok) {

@@ -16,11 +16,9 @@ public class FollowNotLearn {
 
 	private void pivot() {
 		int c = this.ev3.getDirection();
-		long times2 = 250;
-		long times = System.currentTimeMillis();
+		long times2 = 250, times = System.currentTimeMillis();
 		this.ev3.setVitesse(150, 150);
-		boolean end = false;
-		boolean endP = false;
+		boolean end = false, endP = false;
 		while (seenColor != ev3.SUIVRE) {
 			if (System.currentTimeMillis() - times > times2) {
 				c++;
@@ -34,10 +32,7 @@ public class FollowNotLearn {
 				} else {
 					ev3.rotateG();
 				}
-				endP = false;
-				if (end == true) {
-					endP = true;
-				}
+				endP = (end) ? true : false;
 				end = false;
 			}
 			seenColor = find.whatColor(ev3.lireColor());
@@ -58,10 +53,8 @@ public class FollowNotLearn {
 				} else {
 					this.ev3.setVitesse(300, 700);
 				}
-				this.ev3.arc();
-			} else {
-				this.ev3.arc();
 			}
+			this.ev3.arc();
 			this.seenColor = this.find.whatColor(ev3.lireColor());
 			if (this.seenColor == this.ev3.BACKGROUND) {
 				this.ev3.setLastDirection(this.ev3.getDirection());

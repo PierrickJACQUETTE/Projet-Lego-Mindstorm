@@ -11,7 +11,7 @@ import lejos.robotics.SampleProvider;
 
 public class Robot {
 
-	public final String NAMEFILE = "Couleur2.txt";
+	public final String NAMEFILE = "Couleur.txt";
 	public final short SUIVRE = 1;
 	public final short DEPART = 2;
 	public final short BACKGROUND = 0;

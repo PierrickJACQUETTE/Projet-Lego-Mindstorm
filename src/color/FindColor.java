@@ -171,7 +171,6 @@ public class FindColor {
 				break;
 			} else if (compt2 == (fin2 + 1)) {
 				tableau.set(i, table1.get(compt1 - deb1));
-
 				compt1++;
 			} else if (table1.get(compt1 - deb1).getDistance() < tableau.get(compt2).getDistance()) {
 				tableau.set(i, table1.get(compt1 - deb1));
